@@ -20,6 +20,14 @@ pub fn simple_diff(path1: &str, path2: &str) -> Result<(), Box<(String, String)>
         Err(Box::new((*s1, *s2)))
     }
 }
+
+pub fn print_simple_diff(ok: &str, ng: &str) {
+    let green = "\x1b[32m";
+    let red = "\x1b[31m";
+    let end = "\x1b[0m";
+    println!("{}{}{}", green, ok, end);
+    println!("{}{}{}", red, ng, end);
+}
 enum Val {
     Int(i64),
     Float(f64),
@@ -167,7 +175,14 @@ fn diff_cr_ok() {
 #[test]
 fn diff_ng_typo() {
     let x = *diff("./testdata/ok.txt", "./testdata/ng_typo.txt").unwrap_err();
-    let y: Vec<Vec<String>> = vec!(vec!("hello".to_string(), "world".to_string()), vec!("     ".to_string(), "world".to_string()), vec!("42".to_string()), vec!("  ".to_string()), vec!("3.14159265359".to_string()), vec!("             ".to_string()));
+    let y: Vec<Vec<String>> = vec![
+        vec!["hello".to_string(), "world".to_string()],
+        vec!["     ".to_string(), "world".to_string()],
+        vec!["42".to_string()],
+        vec!["  ".to_string()],
+        vec!["3.14159265359".to_string()],
+        vec!["             ".to_string()],
+    ];
 
     assert_eq!(x == y, true);
 }
