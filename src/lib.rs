@@ -2,20 +2,20 @@ use std::fs::File;
 use std::io;
 use std::io::Read;
 
-pub fn simple_diff(path1: &str, path2: &str) -> Result<(), Box<(String, String)>> {
-    let get_file = |path: &str| -> Result<String, io::Error> {
-        let mut ret = String::new();
-        File::open(path)?.read_to_string(&mut ret)?;
-        ret.retain(|c| c != '\r');
-        Ok(ret)
-    };
+fn get_file(path: &str) -> Result<Box<String>, io::Error> {
+    let mut ret = String::new();
+    File::open(path)?.read_to_string(&mut ret)?;
+    ret.retain(|c| c != '\r');
+    Ok(Box::new(ret))
+}
 
+pub fn simple_diff(path1: &str, path2: &str) -> Result<(), Box<(String, String)>> {
     let s1 = get_file(path1).unwrap();
     let s2 = get_file(path2).unwrap();
-    if s1 == s2 {
+    if *s1 == *s2 {
         Ok(())
     } else {
-        Err(Box::new((s1, s2)))
+        Err(Box::new((*s1, *s2)))
     }
 }
 
