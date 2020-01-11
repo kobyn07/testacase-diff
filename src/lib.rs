@@ -129,6 +129,43 @@ pub fn diff(original: &str, output: &str) -> Result<(), Box<Vec<Vec<String>>>> {
     }
 }
 
+pub fn print_diff(output: &Vec<Vec<String>>) {
+    let green = "\x1b[32m";
+    let red = "\x1b[31m";
+    let end = "\x1b[0m";
+
+    let is_whitespace = |text: &str| -> bool {
+        for c in text.chars() {
+            if c.is_whitespace() {
+                return true;
+            }
+        }
+        false
+    };
+
+    for (i, row) in output.iter().enumerate() {
+        if i % 2 == 0 {
+            for correct in row {
+                print!("{}{}{} ", green, correct, end);
+            }
+            println!();
+        } else {
+            let mut is_show = false;
+            for wrong in row {
+                if !is_whitespace(wrong) {
+                    is_show = true;
+                }
+            }
+            if is_show{
+                for wrong in row{
+                    print!("{}{}{} ", red, wrong, end);
+                }
+                println!();
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 #[test]
 fn simple_diff_ok() {
