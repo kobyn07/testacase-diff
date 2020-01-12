@@ -70,7 +70,7 @@ pub fn diff(original: &str, output: &str) -> Result<(), Box<Vec<Vec<String>>>> {
                     let len = val.to_string().len();
                     wrong.push(" ".to_string().repeat(len));
                 } else {
-                    wrong.push(val.to_string());
+                    wrong.push(cmp.to_string());
                 }
                 correct.push(val.to_string());
             }
@@ -156,7 +156,7 @@ fn diff_ng_typo() {
     let x = *diff("./testdata/ok.txt", "./testdata/ng_typo.txt").unwrap_err();
     let y: Vec<Vec<String>> = vec![
         vec!["hello".to_string(), "world".to_string()],
-        vec!["     ".to_string(), "world".to_string()],
+        vec!["     ".to_string(), "wordl".to_string()],
         vec!["42".to_string()],
         vec!["  ".to_string()],
         vec!["3.14159265359".to_string()],
